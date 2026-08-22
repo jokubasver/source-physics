@@ -257,7 +257,10 @@ void *hk_Memory::aligned_malloc( hk_size_t size, hk_size_t alignment)
 #if defined(WIN32_)
 	return _aligned_malloc ( size, alignment );
 #else
-	return ::malloc(size);
+	void *ptr = nullptr;
+	if ( posix_memalign( &ptr, alignment, size ) != 0 )
+		return nullptr;
+	return ptr;
 #endif
 }
 
